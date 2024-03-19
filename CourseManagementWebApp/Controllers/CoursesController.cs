@@ -21,14 +21,22 @@ namespace CourseManagementWebApp.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(Course course)
+        public async Task<IActionResult> Create(CourseVM courseVm)
         {
-
+            if(!ModelState.IsValid)
+            {
+                ViewBag.courses = _tableStorage.GetAll().ToList();
+                return View("Index");
+            }
+            var course = new Course();
+            course.Name = courseVm.Name;
+            course.CourseCategory = courseVm.CourseCategory;
             course.RowKey = Guid.NewGuid().ToString();
             course.PartitionKey = course.CourseCategory.ToString();
             course.TotalParticipant = int.MinValue;
             await _tableStorage.AddAsync(course);
             return RedirectToAction("Index");
+          
         }
         [HttpGet]
         public async Task<IActionResult> Delete(string rowkey, string partitionKey)
@@ -41,8 +49,8 @@ namespace CourseManagementWebApp.Controllers
         {
             if (!string.IsNullOrEmpty(filteredName))
             {
-                var filteredCourses = _tableStorage.Query(c => c.Name.Equals(filteredName)).ToList();
-                ViewBag.courses = filteredCourses;
+                var filteredCourses = _tableStorage.Query( x=> x.Name.Equals(filteredName)).ToList();
+                ViewBag.courses = filteredCourses.ToList();
                 return View("Index");
             }
             return RedirectToAction("Index");

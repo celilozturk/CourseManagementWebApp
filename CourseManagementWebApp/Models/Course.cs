@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace CourseManagementWebApp.Models
 {
