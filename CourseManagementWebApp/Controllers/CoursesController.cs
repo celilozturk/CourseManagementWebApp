@@ -18,26 +18,55 @@ namespace CourseManagementWebApp.Controllers
         public IActionResult Index()
         {
             ViewBag.courses = _tableStorage.GetAll().ToList();
+            ViewBag.isUpdate = false;
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(CourseVM courseVm)
+        public async Task<IActionResult> Create(Course course)
         {
-            if(!ModelState.IsValid)
+            if (course.Name ==null)
             {
+                //ModelState.AddModelError("Name","Name field is required!");
+                ViewBag.isUpdate = false;
                 ViewBag.courses = _tableStorage.GetAll().ToList();
                 return View("Index");
             }
-            var course = new Course();
-            course.Name = courseVm.Name;
-            course.CourseCategory = courseVm.CourseCategory;
             course.RowKey = Guid.NewGuid().ToString();
             course.PartitionKey = course.CourseCategory.ToString();
-            course.TotalParticipant = int.MinValue;
+            course.TotalParticipant = 0;
             await _tableStorage.AddAsync(course);
+            ViewBag.courses = _tableStorage.GetAll().ToList();
             return RedirectToAction("Index");
           
         }
+        [HttpGet]
+        public async Task<IActionResult> Update(string rowkey, string partitionKey)
+        {
+            var course=await _tableStorage.GetAsync(rowkey, partitionKey);
+            ViewBag.courses = _tableStorage.GetAll().ToList();
+            ViewBag.isUpdate = true;
+            return View("Index",course);
+
+        }
+
+            [HttpPost]
+        public async Task<IActionResult> Update(Course course)
+        {
+            if (course.Name == null)
+            {
+                //ModelState.AddModelError("Name","Name field is required!");
+                ViewBag.isUpdate = false;
+                ViewBag.courses = _tableStorage.GetAll().ToList();
+                return View("Index");
+            }
+            course.ETag = "*";
+          
+            ViewBag.isUpdate=false;
+            await _tableStorage.UpdateAsync(course);
+            return RedirectToAction("Index");
+
+        }
+
         [HttpGet]
         public async Task<IActionResult> Delete(string rowkey, string partitionKey)
         {
@@ -51,6 +80,7 @@ namespace CourseManagementWebApp.Controllers
             {
                 var filteredCourses = _tableStorage.Query( x=> x.Name.Equals(filteredName)).ToList();
                 ViewBag.courses = filteredCourses.ToList();
+                ViewBag.isUpdate = false;
                 return View("Index");
             }
             return RedirectToAction("Index");

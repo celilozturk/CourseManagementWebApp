@@ -1,13 +1,16 @@
-﻿@model CourseVM;
+﻿@model Course;
 
 
 
 <h3 class="display-6">Add New Courses</h3>
-<form method="post" asp-action="Create">
-    <span asp-validation-for="@Model.Name" class="text-danger"></span><br/>
+<form method="post" asp-action="@(ViewBag.isUpdate? "Update" : "Create")" enctype="application/x-www-form-urlencoded">
+    <span asp-validation-for="Name" class="text-danger"></span><br/>
     <input asp-for="@Model.Name" placeholder="Course Name" />
     <select asp-items="Html.GetEnumSelectList<ECourseCategory>()" asp-for="CourseCategory"></select>
-    <input type="submit"  value="Save" class="btn btn-primary"/>
+    <input asp-for="@Model.RowKey" type="hidden" />
+    <input asp-for="@Model.PartitionKey" type="hidden" />
+    <input asp-for="@Model.TotalParticipant" type="hidden" />
+    <input type="submit"  value="@(ViewBag.isUpdate ? "Update" : "Save")" class="btn btn-primary"/>
     
 </form>
 
@@ -45,7 +48,7 @@
                         <td>@course.TotalParticipant</td>
                         <td>@course.createdAt</td>
                         <td>
-                            <a asp-action="Edit" asp-controller="Courses" class="btn btn-danger" asp-route-rowKey="@course.RowKey" asp-route-partitionKey="@course.PartitionKey">Edit</a>
+                            <a asp-action="Update" asp-controller="Courses" class="btn btn-danger" asp-route-rowKey="@course.RowKey" asp-route-partitionKey="@course.PartitionKey">Edit</a>
                             <a asp-action="Delete" asp-controller="Courses" class="btn btn-danger" asp-route-rowKey="@course.RowKey" asp-route-partitionKey="@course.PartitionKey">Delete</a>
                         </td>
                     </tr>
