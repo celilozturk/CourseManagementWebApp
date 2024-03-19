@@ -10,7 +10,7 @@ namespace CourseManagementWebApp.Models
         [DisplayName("Course Name")]
         public string Name { get; set; }
         [DisplayName("Course Category")]
-        public ECourseCategory CourseCategory { get; set; }=ECourseCategory.web;
+        public ECourseCategory CourseCategory { get; set; }
         [DisplayName("Total Participants")]
         public int TotalParticipant { get; set; }
         [DisplayName("Create Date")]
