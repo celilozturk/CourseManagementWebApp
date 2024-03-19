@@ -1,1 +1,50 @@
-﻿
+﻿@model Course;
+
+
+
+<h3 class="display-6">Add New Courses</h3>
+<form method="post" asp-action="Create">
+    <input asp-for="Name" placeholder="Course Name" />
+    <select asp-items="Html.GetEnumSelectList<ECourseCategory>()" asp-for="CourseCategory"></select>    
+    <input type="submit"  value="Save" class="btn btn-primary"/>
+</form>
+
+<div class="mt-2">
+    <h4>Search</h4>
+    <form method="get" asp-action="FilterByName">
+        <input type="text" name="filteredName" placeholder="Course Name"/>
+        <button type="submit" class="btn btn-info">Search By Name</button>
+    </form>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <td>Name</td>
+            <td>CourseCategory</td>
+            <td>TotalParticipant</td>
+            <td>createdAt</td>
+        </tr>
+    </thead>
+    <tbody>
+        
+@*             @if(((IEnumerable<dynamic>)ViewBag.courses).Count() == 0)
+ *@            @if(Enumerable.Count(ViewBag.courses) == 0)
+            {
+                <div class="alert alert-danger">No Records Found! </div>
+            }
+            else
+            {
+                @foreach (var course in ViewBag.courses as List<Course>)
+                {
+                    <tr>
+                        <td>@course.Name</td>
+                        <td>@course.CourseCategory</td>
+                        <td>@course.TotalParticipant</td>
+                        <td>@course.createdAt</td>
+                    </tr>
+                }
+            }
+     
+    </tbody>
+</table>

@@ -1,7 +1,12 @@
-var builder = WebApplication.CreateBuilder(args);
+using AzureStorageLibrary;
+using AzureStorageLibrary.Services;
 
+var builder = WebApplication.CreateBuilder(args);
+ConnectionStrings.AzureStorageConnectionString = builder.Configuration.GetSection("AzureConnectionStrings")["LocalStorageConnStr"];
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped(typeof(INoSqlStorage<>), typeof(TableStorage<>));
+
 
 var app = builder.Build();
 
