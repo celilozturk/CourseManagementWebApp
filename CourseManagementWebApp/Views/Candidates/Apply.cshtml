@@ -1,0 +1,39 @@
+﻿
+@model Candidate
+
+<h4 class="display-3">Apply Page</h4>
+
+<form method="post">
+    <div class="form-group w-50 ">
+        <label asp-for="Email" ></label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+    <div class="form-group w-50 ">
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" class="form-control" />
+    </div>
+    <div class="form-group w-50 ">
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" class="form-control" />
+    </div>
+    <div class="form-group w-50 ">
+        <label asp-for="Age"></label>
+       <select asp-for="Age" class="form-control">
+           @for(int i=18;i<40;i++){
+               <option value="@i">@i</option>
+           }
+       </select>
+    </div>
+    <div class="form-group w-50">
+        Courses will list here...........
+        <br/>
+        <input type="checkbox"  value="XX" class="form-check-input" />
+        <label >XX</label>
+        <input type="checkbox" value="YY" class="form-check-input ms-2" />
+        <label>YY</label>
+    </div>
+  
+
+    <button type="submit" class="btn btn-info my-3">Apply</button>
+
+</form>
