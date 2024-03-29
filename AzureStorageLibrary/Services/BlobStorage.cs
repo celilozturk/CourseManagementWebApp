@@ -39,7 +39,14 @@ namespace AzureStorageLibrary.Services
 
         public List<string> GetNames(EContainerName eContainerName)
         {
-            throw new NotImplementedException();
+           List<string> blobNames=new ();
+            var containerClient = _blobServiceClient.GetBlobContainerClient(eContainerName.ToString());
+            var blobs = containerClient.GetBlobs();
+            blobs.ToList().ForEach(b =>
+            {
+                blobNames.Add(b.Name);
+            });
+            return blobNames;
         }
 
         public Task SetLogAsync(string text, string blobName)
