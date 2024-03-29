@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Azure.Storage.Blobs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,16 +9,27 @@ namespace AzureStorageLibrary.Services
 {
     public class BlobStorage : IBlobStorage
     {
-        public string BlobUrl => throw new NotImplementedException();
-
-        public Task DeleteAsync(string fileName, EContainerName eContainerName)
+        private readonly BlobServiceClient _blobServiceClient;
+        public BlobStorage()
         {
-            throw new NotImplementedException();
+            _blobServiceClient = new BlobServiceClient(ConnectionStrings.AzureStorageConnectionString);
+        }
+        public string BlobUrl => "http://127.0.0.1:10000/devstoreaccount1";
+
+        public async Task DeleteAsync(string fileName, EContainerName eContainerName)
+        {
+            var containerClient = _blobServiceClient.GetBlobContainerClient(eContainerName.ToString());
+            var blobClient = containerClient.GetBlobClient(fileName);
+            await blobClient.DeleteAsync();
         }
 
-        public Task<Stream> DownloadAsync(string fileName, EContainerName eContainerName)
+        public async Task<Stream> DownloadAsync(string fileName, EContainerName eContainerName)
         {
-            throw new NotImplementedException();
+            var containerClient = _blobServiceClient.GetBlobContainerClient(eContainerName.ToString());
+            var blobClient=containerClient.GetBlobClient(fileName);
+            var ms=new MemoryStream();
+            var info = await blobClient.DownloadStreamingAsync();
+            return info.Value.Content;
         }
 
         public Task<List<string>> GetLogAsync(string blobName)
@@ -35,9 +47,13 @@ namespace AzureStorageLibrary.Services
             throw new NotImplementedException();
         }
 
-        public Task UploadAsync(Stream fileStream, string fileName, EContainerName eContainerName)
+        public async Task UploadAsync(Stream fileStream, string fileName, EContainerName eContainerName)
         {
-            throw new NotImplementedException();
+            var containerClient = _blobServiceClient.GetBlobContainerClient(eContainerName.ToString());
+            await containerClient.CreateIfNotExistsAsync();
+            containerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.BlobContainer);
+            var blobClient=containerClient.GetBlobClient(fileName);
+            await blobClient.UploadAsync(fileStream, true);
         }
     }
 }
