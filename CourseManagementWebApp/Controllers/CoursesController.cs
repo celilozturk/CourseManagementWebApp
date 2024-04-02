@@ -55,6 +55,7 @@ namespace CourseManagementWebApp.Controllers
             ViewBag.courses = _tableStorage.GetAll().ToList();
             ViewBag.isUpdate = true;
             ViewBag.logs = await _blobStorage.GetLogAsync("course_logs.txt");
+            ViewBag.blobUrl = _blobStorage.BlobUrl;
             return View("Index",course);
 
         }
@@ -67,6 +68,7 @@ namespace CourseManagementWebApp.Controllers
                 //ModelState.AddModelError("Name","Name field is required!");
                 ViewBag.isUpdate = false;
                 ViewBag.courses = _tableStorage.GetAll().ToList();
+                ViewBag.blobUrl = _blobStorage.BlobUrl;
                 return View("Index");
             }
             course.ETag = "*";
