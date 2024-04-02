@@ -9,16 +9,19 @@ namespace CourseManagementWebApp.Controllers
     public class CoursesController : Controller
     {
         private readonly INoSqlStorage<Course> _tableStorage;
+        private readonly IBlobStorage _blobStorage;
 
-        public CoursesController(INoSqlStorage<Course> tableStorage)
+        public CoursesController(INoSqlStorage<Course> tableStorage, IBlobStorage blobStorage)
         {
             _tableStorage = tableStorage;
+            _blobStorage = blobStorage;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewBag.courses = _tableStorage.GetAll().ToList();
             ViewBag.isUpdate = false;
+            ViewBag.logs = await _blobStorage.GetLogAsync("course_logs.txt");
             return View();
         }
         [HttpPost]
@@ -35,6 +38,7 @@ namespace CourseManagementWebApp.Controllers
             course.PartitionKey = course.CourseCategory.ToString();
             course.TotalParticipant = 0;
             await _tableStorage.AddAsync(course);
+            await _blobStorage.SetLogAsync("New Course was added!", "course_logs.txt");
             ViewBag.courses = _tableStorage.GetAll().ToList();
             return RedirectToAction("Index");
           

@@ -57,3 +57,9 @@
      
     </tbody>
 </table>
+<p class="lead">
+    @foreach(var log in ViewBag.logs)
+    {
+        <span class="text-danger">@log</span></br>
+    }
+</p>
