@@ -1,6 +1,8 @@
 ﻿@model Course;
 
-
+<div>
+    <a asp-action="Index" asp-controller="Blobs" class="btn btn-outline-warning" >Add Picture</a>
+</div>
 
 <h3 class="display-6">Add New Courses</h3>
 <form method="post" asp-action="@(ViewBag.isUpdate? "Update" : "Create")" enctype="application/x-www-form-urlencoded">
