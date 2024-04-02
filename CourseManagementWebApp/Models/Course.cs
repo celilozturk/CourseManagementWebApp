@@ -15,6 +15,7 @@ namespace CourseManagementWebApp.Models
         public int TotalParticipant { get; set; }
         [DisplayName("Create Date")]
         public DateTime createdAt { get; set; } = DateTime.Now;
+        public string CoursePicture { get; set; }
 
     }
 }

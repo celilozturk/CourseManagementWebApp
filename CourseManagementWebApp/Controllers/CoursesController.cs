@@ -22,10 +22,11 @@ namespace CourseManagementWebApp.Controllers
             ViewBag.courses = _tableStorage.GetAll().ToList();
             ViewBag.isUpdate = false;
             ViewBag.logs = await _blobStorage.GetLogAsync("course_logs.txt");
+            ViewBag.blobUrl = _blobStorage.BlobUrl;
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(Course course)
+        public async Task<IActionResult> Create(Course course,IFormFile picture)
         {
             if (course.Name ==null)
             {
@@ -37,9 +38,13 @@ namespace CourseManagementWebApp.Controllers
             course.RowKey = Guid.NewGuid().ToString();
             course.PartitionKey = course.CourseCategory.ToString();
             course.TotalParticipant = 0;
+            var newFileName = Guid.NewGuid().ToString() + Path.GetExtension(picture.FileName);
+            await _blobStorage.UploadAsync(picture.OpenReadStream(), newFileName,EContainerName.pictures);
+            course.CoursePicture = newFileName;
             await _tableStorage.AddAsync(course);
             await _blobStorage.SetLogAsync("New Course was added!", "course_logs.txt");
             ViewBag.courses = _tableStorage.GetAll().ToList();
+            ViewBag.blobUrl = _blobStorage.BlobUrl;
             return RedirectToAction("Index");
           
         }

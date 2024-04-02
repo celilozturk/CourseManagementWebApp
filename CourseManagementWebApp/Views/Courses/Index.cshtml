@@ -5,13 +5,14 @@
 </div>
 
 <h3 class="display-6">Add New Courses</h3>
-<form method="post" asp-action="@(ViewBag.isUpdate? "Update" : "Create")" enctype="application/x-www-form-urlencoded">
+<form method="post" asp-action="@(ViewBag.isUpdate? "Update" : "Create")" enctype="multipart/form-data">
     <span asp-validation-for="Name" class="text-danger"></span><br/>
     <input asp-for="@Model.Name" placeholder="Course Name" />
     <select asp-items="Html.GetEnumSelectList<ECourseCategory>()" asp-for="CourseCategory"></select>
     <input asp-for="@Model.RowKey" type="hidden" />
     <input asp-for="@Model.PartitionKey" type="hidden" />
     <input asp-for="@Model.TotalParticipant" type="hidden" />
+    <input type="file" name="picture" />
     <input type="submit"  value="@(ViewBag.isUpdate ? "Update" : "Save")" class="btn btn-primary"/>
     
 </form>
@@ -31,6 +32,7 @@
             <td>CourseCategory</td>
             <td>TotalParticipant</td>
             <td>createdAt</td>
+            <td>Picture</td>
         </tr>
     </thead>
     <tbody>
@@ -49,6 +51,9 @@
                         <td>@course.PartitionKey</td>
                         <td>@course.TotalParticipant</td>
                         <td>@course.createdAt</td>
+                        <td>
+                        <img src="@ViewBag.blobUrl/pictures/@course.CoursePicture" style="width:100px;height:100px" />
+                        </td>
                         <td>
                             <a asp-action="Update" asp-controller="Courses" class="btn btn-danger" asp-route-rowKey="@course.RowKey" asp-route-partitionKey="@course.PartitionKey">Edit</a>
                             <a asp-action="Delete" asp-controller="Courses" class="btn btn-danger" asp-route-rowKey="@course.RowKey" asp-route-partitionKey="@course.PartitionKey">Delete</a>
