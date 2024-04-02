@@ -58,8 +58,8 @@
     </tbody>
 </table>
 <p class="lead">
-    @foreach(var log in ViewBag.logs)
+    @foreach(var log in ViewBag.logs as List<string>)
     {
-        <span class="text-danger">@log</span></br>
+        <div class="text-danger">@log</div>
     }
 </p>

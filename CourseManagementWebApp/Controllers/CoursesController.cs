@@ -49,6 +49,7 @@ namespace CourseManagementWebApp.Controllers
             var course=await _tableStorage.GetAsync(rowkey, partitionKey);
             ViewBag.courses = _tableStorage.GetAll().ToList();
             ViewBag.isUpdate = true;
+            ViewBag.logs = await _blobStorage.GetLogAsync("course_logs.txt");
             return View("Index",course);
 
         }
@@ -67,6 +68,7 @@ namespace CourseManagementWebApp.Controllers
           
             ViewBag.isUpdate=false;
             await _tableStorage.UpdateAsync(course);
+            await _blobStorage.SetLogAsync("New Course was updated successfully!", "course_logs.txt");
             return RedirectToAction("Index");
 
         }
