@@ -77,6 +77,7 @@ namespace CourseManagementWebApp.Controllers
         public async Task<IActionResult> Delete(string rowkey, string partitionKey)
         {
             await _tableStorage.DeleteAsync(rowkey, partitionKey);
+            await _blobStorage.SetLogAsync("New Course was deleted successfully!", "course_logs.txt");
             return RedirectToAction("Index");
         }
         [HttpGet]
