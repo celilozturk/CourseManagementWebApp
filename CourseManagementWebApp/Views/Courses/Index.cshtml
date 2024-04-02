@@ -1,9 +1,10 @@
 ﻿@model Course;
-@* @using AzureStorageLibrary;
-@inject IBlobStorage _blobStorage;
+@using AzureStorageLibrary;
+@* @inject IBlobStorage _blobStorage;
 @{
     var blobUrl = _blobStorage.BlobUrl;
-} *@
+}
+<div class="alert alert-warning">@blobUrl</div> *@
 
 <div>
     <a asp-action="Index" asp-controller="Blobs" class="btn btn-outline-warning" >Add Picture</a>
