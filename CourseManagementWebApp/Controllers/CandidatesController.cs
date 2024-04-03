@@ -34,6 +34,7 @@ namespace CourseManagementWebApp.Controllers
             model.RowKey=Guid.NewGuid().ToString();
             model.PartitionKey = model.Email;
             _tableStorageCandidate.AddAsync(model);
+            
             return View("Feedback",model);
         }
 
