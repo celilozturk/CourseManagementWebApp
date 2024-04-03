@@ -1,7 +1,13 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
+﻿@model Candidate
 <h4>Candidates Page</h4>
+
+<div class="col-md-6 offset-3">
+    <form method="post" asp-action="Apply">
+        <input asp-for="Email" class="form-control mb-2" placeholder="Email" />
+        <input asp-for="FirstName" class="form-control mb-2" placeholder="First Name" />
+        <input asp-for="LastName" class="form-control mb-2" placeholder="Last Name" />
+        <input asp-for="Age" class="form-control mb-2" placeholder="Age" />
+        <select asp-for="SelectedCourse" asp-items="ViewBag.Courses" class="form-select my-2"> </select>
+        <button type="submit" class="btn btn-primary">Apply</button>
+    </form>
+</div>

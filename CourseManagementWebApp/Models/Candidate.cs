@@ -1,9 +1,10 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.Azure.Cosmos.Table;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace CourseManagementWebApp.Models
 {
-    public class Candidate
+    public class Candidate:TableEntity
     {
         [DisplayName("Email Address")]
         [Required(ErrorMessage ="Email is required")]
@@ -16,7 +17,7 @@ namespace CourseManagementWebApp.Models
         public string LastName { get; set; }
         public string FullName => $"{FirstName} {LastName?.ToUpper()}";
         public int Age { get; set; }
-        public List<Course> SelectedCourses { get; set; } 
+        public string SelectedCourse { get; set; } 
         public DateTime ApplyAt { get; set; }
         public Candidate()
         {
