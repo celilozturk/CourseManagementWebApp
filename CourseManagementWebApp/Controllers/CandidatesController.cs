@@ -9,11 +9,13 @@ namespace CourseManagementWebApp.Controllers
     {
         private readonly INoSqlStorage<Candidate> _tableStorageCandidate;
         private readonly INoSqlStorage<Course> _tableStorageCourse;
+        private readonly IBlobStorage _blobStorage;
 
-        public CandidatesController(INoSqlStorage<Course> tableStorageCourse, INoSqlStorage<Candidate> tableStorageCandidate)
+        public CandidatesController(INoSqlStorage<Course> tableStorageCourse, INoSqlStorage<Candidate> tableStorageCandidate, IBlobStorage blobStorage)
         {
             _tableStorageCourse = tableStorageCourse;
             _tableStorageCandidate = tableStorageCandidate;
+            _blobStorage = blobStorage;
         }
 
         public IActionResult Index()
@@ -34,7 +36,7 @@ namespace CourseManagementWebApp.Controllers
             model.RowKey=Guid.NewGuid().ToString();
             model.PartitionKey = model.Email;
             _tableStorageCandidate.AddAsync(model);
-            
+            _blobStorage.SetLogAsync("New candidate application was created!", "candidate_application_logs.txt");
             return View("Feedback",model);
         }
 
