@@ -31,12 +31,14 @@ namespace CourseManagementWebApp.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Apply(Candidate model)
+        public async Task<IActionResult> Apply(Candidate model)
         {
             model.RowKey=Guid.NewGuid().ToString();
             model.PartitionKey = model.Email;
             _tableStorageCandidate.AddAsync(model);
             _blobStorage.SetLogAsync("New candidate application was created!", "candidate_application_logs.txt");
+            TempData["logs"] =await _blobStorage.GetLogAsync("candidate_application_logs.txt");
+            TempData.Keep();
             return View("Feedback",model);
         }
 
