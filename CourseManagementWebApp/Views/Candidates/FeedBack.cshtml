@@ -5,9 +5,7 @@
   Congrats! <span class="text-success">@Model.FullName</span> applied <span class="text-info">@Model.SelectedCourse</span> Course successfully.
 </div>
 <a asp-action="Index" asp-controller="Candidates" class="text-decoration-none">Home</a>
-@{
-    // var logs = TempData["logs"] as List<string>;
-}
+
 <p class="lead">
     @foreach (var log in TempData["logs"] as List<string>)
     {

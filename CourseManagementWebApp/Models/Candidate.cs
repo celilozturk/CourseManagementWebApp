@@ -16,6 +16,7 @@ namespace CourseManagementWebApp.Models
         [Required(ErrorMessage = "Last Name is required")]
         public string LastName { get; set; }
         public string FullName => $"{FirstName} {LastName?.ToUpper()}";
+        [Required]
         public int Age { get; set; }
         public string SelectedCourse { get; set; } 
         public DateTime ApplyAt { get; set; }
